@@ -1,13 +1,80 @@
 import React from 'react';
+import TodoList from './components/TodoList'
+import TodoForm from './components/TodoForm'
+import ls from 'local-storage'
+const todo = [
+  {
+    task: 'Organize Garage',
+    id: 1528817077286,
+    completed: false
+  },
+  {
+    task: 'Bake Cookies',
+    id: 1528817084358,
+    completed: false
+  }
+];
+
 
 class App extends React.Component {
   // you will need a place to store your state in this component.
   // design `App` to be the parent component of your application.
   // this component is going to take care of state, and any change handlers you need to work with your state
+  constructor() {
+    super();
+    this.state = {
+      todo: ls.get('todo') || todo,
+      task: ls.get('task') || ""
+    };
+  };
+  toggleCompleted = clickedItemId => {
+    this.setState({
+      todo: this.state.todo.map(task => {
+        if (task.id === clickedItemId) {
+          return {
+            ...task,
+            completed: !task.completed
+          };
+        } else {
+          return task;
+        }
+      })
+    });
+    ls.set('todo', this.state.todo.map(task => {
+      if (task.id === clickedItemId) {
+        return {
+          ...task,
+          completed: !task.completed
+        };
+      } else {
+        return task;
+      }
+    }))
+  };
+  clearCompleted = e => {
+    this.setState({
+      todo: this.state.todo.filter(task => (task.completed !== true))
+    });
+    console.log("cleared")
+    ls.set('todo', this.state.todo.filter(task => (task.completed !== true)))
+  }
+  addTask = taskName => {
+    const newTask = {
+      task: taskName,
+      id: new Date(),
+      completed: false
+    };
+    this.setState({
+      todo: [...this.state.todo, newTask]
+    });
+    ls.set('todo', [...this.state.todo, newTask])
+  };
   render() {
     return (
-      <div>
+      <div className="todoList">
         <h2>Welcome to your Todo App!</h2>
+      <TodoList todo={this.state.todo} toggleCompleted={this.toggleCompleted} clearCompleted={this.clearCompleted}/>
+      <TodoForm addTask={this.addTask} />
       </div>
     );
   }

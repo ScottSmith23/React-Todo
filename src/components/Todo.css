@@ -1,0 +1,14 @@
+.item.completed {
+ text-decoration: line-through;
+  }
+
+.todoList{
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+  }
+
+  body{
+      background-color: tan;
+  }
