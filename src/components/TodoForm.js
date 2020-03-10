@@ -25,17 +25,20 @@ class TodoForm extends React.Component {
   };
   render() {
     return (
-      <form onSubmit={this.submitForm}>
+      <div>
+      <form className="todoForm"onSubmit={this.submitForm}>
         {/* This is an uncontrolled component 😬 We want it to be controlled by state */}
         <input
+          className="inputStyle"
           type="text"
           name="task"
           value={this.state.task}
           onChange={this.handleChanges}
           placeholder="...todo"
         />
-        <button>Add to List</button>
+        <button className="todoButton">Add to List</button>
       </form>
+      </div>
     );
   }
 }

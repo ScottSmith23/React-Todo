@@ -1,10 +1,13 @@
 import React from "react";
-
+import tack from "../img/tack.png"
 import Todo from "./Todo";
 
 const TodoList = props => {
   return (
-    <div>
+    <div className="todoListed">
+      <div>
+      <img className="tackPic" src={tack}/>
+      </div>
       {props.todo.map(task => (
         <Todo
           key={task.id}
