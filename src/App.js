@@ -1,6 +1,7 @@
 import React from 'react';
 import TodoList from './components/TodoList'
 import TodoForm from './components/TodoForm'
+import ls from 'local-storage'
 const todo = [
   {
     task: 'Organize Garage',
@@ -22,8 +23,8 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      todo: todo,
-      task: ""
+      todo: ls.get('todo') || todo,
+      task: ls.get('task') || ""
     };
   };
   toggleCompleted = clickedItemId => {
@@ -39,12 +40,23 @@ class App extends React.Component {
         }
       })
     });
+    ls.set('todo', this.state.todo.map(task => {
+      if (task.id === clickedItemId) {
+        return {
+          ...task,
+          completed: !task.completed
+        };
+      } else {
+        return task;
+      }
+    }))
   };
   clearCompleted = e => {
     this.setState({
       todo: this.state.todo.filter(task => (task.completed !== true))
     });
     console.log("cleared")
+    ls.set('todo', this.state.todo.filter(task => (task.completed !== true)))
   }
   addTask = taskName => {
     const newTask = {
@@ -55,10 +67,11 @@ class App extends React.Component {
     this.setState({
       todo: [...this.state.todo, newTask]
     });
+    ls.set('todo', [...this.state.todo, newTask])
   };
   render() {
     return (
-      <div>
+      <div className="todoList">
         <h2>Welcome to your Todo App!</h2>
       <TodoList todo={this.state.todo} toggleCompleted={this.toggleCompleted} clearCompleted={this.clearCompleted}/>
       <TodoForm addTask={this.addTask} />
